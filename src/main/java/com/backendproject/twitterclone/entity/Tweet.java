@@ -8,12 +8,11 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Data
-@Entity
-@Table
 @NoArgsConstructor
+@Entity
+@Table(name="tweet", schema = "twitter")
 
 public class Tweet {
     @Id
@@ -33,9 +32,8 @@ public class Tweet {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH} )
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     @JoinColumn(name = "user_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
 
@@ -57,16 +55,4 @@ public class Tweet {
     public void onPreUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
-    /*
-
-    {
-        "text": "My first tweet..",
-        "image_url": "www.images.com/image/1",
-    }
-
-
-
-     */
-
 }
