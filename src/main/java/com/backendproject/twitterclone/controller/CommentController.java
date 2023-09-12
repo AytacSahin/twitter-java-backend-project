@@ -1,6 +1,5 @@
 package com.backendproject.twitterclone.controller;
 
-
 import com.backendproject.twitterclone.entity.Comment;
 import com.backendproject.twitterclone.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,18 +34,11 @@ public class CommentController {
 
     @PutMapping("/{id}")
     public Comment save(@RequestBody Comment comment, @PathVariable int id ){
-        Comment founded = findById(id);
-        if (founded != null){
-            comment.setId(id);
-            return commentService.save(comment);
-        }
-        return null;
+        return commentService.update(id, comment);
     }
 
     @DeleteMapping("/{id}")
     public Comment delete(@PathVariable int id) {
-        Comment founded = findById(id);
-        commentService.delete(founded);
-        return founded;
+        return commentService.deleteById(id);
     }
 }

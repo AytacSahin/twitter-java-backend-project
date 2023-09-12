@@ -16,12 +16,12 @@ public class Like {
     private int id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
-    @JoinColumn(name = "tweet_id")
+    @JoinColumn(name = "tweet_id", nullable = false)
     @JsonIgnore
     private Tweet tweet;
 

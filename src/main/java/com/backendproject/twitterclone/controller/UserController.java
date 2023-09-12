@@ -35,18 +35,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User save(@RequestBody User user, @PathVariable int id) {
-        User founded = findById(id);
-        if (founded != null) {
-            user.setId(id);
-            return userService.save(user);
-        }
-        return null;
+        return userService.updateOneUser(user, id);
     }
 
     @DeleteMapping("/{id}")
     public User delete(@PathVariable int id) {
-        User founded = findById(id);
-        userService.delete(founded);
-        return founded;
+        return userService.deleteOneUser(id);
     }
 }

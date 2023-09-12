@@ -9,4 +9,6 @@ public interface CommentService {
     Comment find(int id);
     Comment save(Comment comment);
     void delete(Comment comment);
+    Comment update(int id, Comment comment);
+    Comment deleteById(int id);
 }

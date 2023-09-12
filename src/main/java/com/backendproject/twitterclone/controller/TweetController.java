@@ -1,11 +1,14 @@
 package com.backendproject.twitterclone.controller;
 
 import com.backendproject.twitterclone.entity.Tweet;
+import com.backendproject.twitterclone.requests.TweetCreateRequest;
+import com.backendproject.twitterclone.requests.TweetUpdateRequest;
 import com.backendproject.twitterclone.service.TweetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/tweet")
@@ -18,8 +21,9 @@ public class TweetController {
     }
 
     @GetMapping
-    public List<Tweet> findAll(){
-        return tweetService.findAll();
+    public List<Tweet> getAllTweets(@RequestParam Optional<Integer> userId){
+//        Optional sayesinde userId gelirse -> userId'ye ait, gelmezse tum tweet'ler.
+        return tweetService.getAllTweets(userId);
     }
 
     @GetMapping("/{id}")
@@ -28,24 +32,17 @@ public class TweetController {
     }
 
     @PostMapping
-    public Tweet save(@RequestBody Tweet tweet){
-        return tweetService.save(tweet);
+    public Tweet createOneTweet(@RequestBody TweetCreateRequest newTweet){
+        return tweetService.save(newTweet);
     }
 
     @PutMapping("/{id}")
-    public Tweet save(@RequestBody Tweet tweet, @PathVariable int id ){
-        Tweet founded = findById(id);
-        if (founded != null){
-            tweet.setId(id);
-            return tweetService.save(tweet);
-        }
-        return null;
+    public Tweet updateOneTweet(@RequestBody TweetUpdateRequest tweetUpdateRequest, @PathVariable int id ){
+        return tweetService.updateOneTweetById(tweetUpdateRequest, id);
     }
 
     @DeleteMapping("/{id}")
     public Tweet delete(@PathVariable int id) {
-        Tweet founded = findById(id);
-        tweetService.delete(founded);
-        return founded;
+        return tweetService.delete(id);
     }
 }

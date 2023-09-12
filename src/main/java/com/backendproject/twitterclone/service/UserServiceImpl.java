@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
+
     private UserRepository userRepository;
 
     @Autowired
@@ -20,22 +21,44 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public List<User> findAll() {
+        //TODO handle exceptions
         return userRepository.findAll();
     }
 
     @Override
     public User find(int id) {
+        //TODO handle exceptions
         Optional<User> user = userRepository.findById(id);
         return user.isPresent() ? user.get() : null;
     }
 
     @Override
     public User save(User user) {
+        //TODO handle exceptions
         return userRepository.save(user);
     }
 
     @Override
     public void delete(User user) {
+        //TODO handle exceptions
         userRepository.delete(user);
+    }
+    @Override
+    public User updateOneUser(User user, int id) {
+        //TODO handle exceptions
+        User founded = find(id);
+        if (founded != null) {
+            user.setId(id);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    @Override
+    public User deleteOneUser(int id) {
+        //TODO handle exceptions
+        User founded = find(id);
+        userRepository.delete(founded);
+        return founded;
     }
 }
