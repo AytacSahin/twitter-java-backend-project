@@ -1,9 +1,12 @@
 package com.backendproject.twitterclone.entity;
 
+import com.backendproject.twitterclone.helpers.TimeDateFn;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -26,14 +29,35 @@ public class Comment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL )
+    @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "tweet_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Tweet tweet;
+
+    public Comment(String text, User user, Tweet tweet) {
+        this.text = text;
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+        this.user = user;
+        this.tweet = tweet;
+    }
+
+    @PrePersist
+    public void onPrePersist() {
+        this.createdAt = TimeDateFn.TimeCalculator();
+        this.updatedAt = TimeDateFn.TimeCalculator();
+    }
+
+    @PreUpdate
+    public void onPreUpdate() {
+        this.updatedAt = TimeDateFn.TimeCalculator();
+    }
 
 }

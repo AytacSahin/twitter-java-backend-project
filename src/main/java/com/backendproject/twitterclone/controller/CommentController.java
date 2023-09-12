@@ -1,11 +1,14 @@
 package com.backendproject.twitterclone.controller;
 
 import com.backendproject.twitterclone.entity.Comment;
+import com.backendproject.twitterclone.requests.CommentCreateRequest;
+import com.backendproject.twitterclone.requests.CommentUpdateRequest;
 import com.backendproject.twitterclone.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/comment")
@@ -18,27 +21,27 @@ public class CommentController {
     }
 
     @GetMapping
-    public List<Comment> findAll(){
-        return commentService.findAll();
+    public List<Comment> getAllComments(@RequestParam Optional<Integer> userId, @RequestParam Optional<Integer> tweetId){
+        return commentService.getAllCommentsWithParam(userId, tweetId);
     }
 
-    @GetMapping("/{id}")
-    public Comment findById(@PathVariable int id){
-        return commentService.find(id);
+    @GetMapping("/{commentId}")
+    public Comment findById(@PathVariable int commentId){
+        return commentService.find(commentId);
     }
 
     @PostMapping
-    public Comment save(@RequestBody Comment comment){
-        return commentService.save(comment);
+    public Comment save(@RequestBody CommentCreateRequest createRequest){
+        return commentService.createOneComment(createRequest);
     }
 
-    @PutMapping("/{id}")
-    public Comment save(@RequestBody Comment comment, @PathVariable int id ){
-        return commentService.update(id, comment);
+    @PutMapping("/{commentId}")
+    public Comment save(@RequestBody CommentUpdateRequest updateRequest, @PathVariable int commentId ){
+        return commentService.updateOneComment(commentId, updateRequest);
     }
 
-    @DeleteMapping("/{id}")
-    public Comment delete(@PathVariable int id) {
-        return commentService.deleteById(id);
+    @DeleteMapping("/{commentId}")
+    public Comment delete(@PathVariable int commentId) {
+        return commentService.deleteById(commentId);
     }
 }

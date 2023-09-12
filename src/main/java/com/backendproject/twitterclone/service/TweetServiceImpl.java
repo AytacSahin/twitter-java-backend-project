@@ -79,6 +79,7 @@ public class TweetServiceImpl implements TweetService{
             LocalDateTime updateTime = LocalDateTime.now();
             toUpdate.setUpdatedAt(updateTime);
             tweetRepository.save(toUpdate);
+            return toUpdate;
         }
         return null;
     }
