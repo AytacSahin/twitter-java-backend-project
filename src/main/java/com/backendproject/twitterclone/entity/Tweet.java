@@ -20,7 +20,7 @@ public class Tweet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tweet_id")
-    private long id;
+    private int id;
 
     @Column(name = "text")
     private String text;
@@ -41,7 +41,7 @@ public class Tweet {
     private User user;
 
     @OneToMany(mappedBy = "tweet", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Comment> comments;
+    private List<Like> likes;
 
     public Tweet(String text, String imageUrl, User user) {
         this.text = text;

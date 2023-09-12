@@ -1,11 +1,14 @@
 package com.backendproject.twitterclone.controller;
 
 import com.backendproject.twitterclone.entity.Like;
+import com.backendproject.twitterclone.requests.LikeCreateRequest;
+import com.backendproject.twitterclone.responses.LikeResponse;
 import com.backendproject.twitterclone.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/like")
@@ -17,35 +20,20 @@ public class LikeController {
         this.likeService = likeService;
     }
     @GetMapping
-    public List<Like> findAll(){
-        return likeService.findAll();
+    public List<LikeResponse> getAllLikes(@RequestParam Optional<Integer> userId,
+                                          @RequestParam Optional<Integer> tweetId) {
+        return likeService.getAllLikesWithParam(userId, tweetId);
     }
-
     @GetMapping("/{id}")
-    public Like findById(@PathVariable int id){
+    public Like getOneLike(@PathVariable int id) {
         return likeService.find(id);
     }
-
     @PostMapping
-    public Like save(@RequestBody Like like){
-        return likeService.save(like);
+    public Like createOneLike(@RequestBody LikeCreateRequest request) {
+        return likeService.createOneLike(request);
     }
-
-    @PutMapping("/{id}")
-    public Like save(@RequestBody Like like, @PathVariable int id ){
-        //TODO service layer'ina tasi:
-        Like founded = findById(id);
-        if (founded != null){
-            like.setId(id);
-            return likeService.save(like);
-        }
-        return null;
-    }
-
     @DeleteMapping("/{id}")
-    public Like delete(@PathVariable int id) {
-        Like founded = findById(id);
-        likeService.delete(founded);
-        return founded;
+    public void deleteOneLike(@PathVariable int id) {
+        likeService.delete(id);
     }
 }

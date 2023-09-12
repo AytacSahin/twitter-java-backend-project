@@ -1,12 +1,17 @@
 package com.backendproject.twitterclone.service;
 
 import com.backendproject.twitterclone.entity.Like;
+import com.backendproject.twitterclone.requests.LikeCreateRequest;
+import com.backendproject.twitterclone.responses.LikeResponse;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface LikeService {
-    List<Like> findAll();
     Like find(int id);
-    Like save(Like like);
-    void delete(Like like);
+    void delete(int id);
+    List<LikeResponse> getAllLikesWithParam(Optional<Integer> userId, Optional<Integer> tweetId);
+    Like createOneLike(LikeCreateRequest request);
 }
+
