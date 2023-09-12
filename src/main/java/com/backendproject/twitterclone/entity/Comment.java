@@ -2,6 +2,7 @@ package com.backendproject.twitterclone.entity;
 
 import com.backendproject.twitterclone.helpers.TimeDateFn;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @Entity
+@JsonIgnoreProperties(value = {"handler", "hibernateLazyInitializer", "FieldHandler"})
 @Table(name="comment", schema = "twitter")
 public class Comment {
     @Id
@@ -36,7 +38,7 @@ public class Comment {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY )
-    @JoinColumn(name = "tweet_id")
+    @JoinColumn(name = "tweet_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Tweet tweet;

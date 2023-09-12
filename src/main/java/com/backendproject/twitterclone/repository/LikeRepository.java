@@ -11,6 +11,4 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
     List<Like> findByUserId(Integer userId);
 
     List<Like> findByTweetId(Integer tweetId);
-
-    void deleteOneLike(int id);
 }

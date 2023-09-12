@@ -1,6 +1,5 @@
 package com.backendproject.twitterclone.service;
 
-import com.backendproject.twitterclone.entity.Tweet;
 import com.backendproject.twitterclone.entity.User;
 import com.backendproject.twitterclone.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

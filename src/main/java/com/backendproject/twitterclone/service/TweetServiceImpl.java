@@ -5,31 +5,30 @@ import com.backendproject.twitterclone.entity.User;
 import com.backendproject.twitterclone.repository.TweetRepository;
 import com.backendproject.twitterclone.requests.TweetCreateRequest;
 import com.backendproject.twitterclone.requests.TweetUpdateRequest;
+import com.backendproject.twitterclone.responses.TweetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TweetServiceImpl implements TweetService{
 
     private TweetRepository tweetRepository;
     private UserService userService;
-
-    public TweetServiceImpl(TweetRepository tweetRepository, UserService userService) {
-        this.tweetRepository = tweetRepository;
-        this.userService = userService;
-    }
+    private LikeService likeService;
+    private CommentService commentService;
 
     @Autowired
-
-
-    @Override
-    public List<Tweet> findAll() {
-        //TODO handle exceptions
-        return tweetRepository.findAll();
+    public TweetServiceImpl(TweetRepository tweetRepository, UserService userService, LikeService likeService, CommentService commentService) {
+        this.tweetRepository = tweetRepository;
+        this.userService = userService;
+        this.likeService = likeService;
+        this.commentService = commentService;
     }
 
     @Override
@@ -62,13 +61,37 @@ public class TweetServiceImpl implements TweetService{
     }
 
     @Override
-    public List<Tweet> getAllTweets(Optional<Integer> userId) {
-        //TODO handle exceptions
+    public List<TweetResponse> getAllTweets(Optional<Integer> userId) {
+        // TODO handle exceptions
+        List<Tweet> mappedList;
         if (userId.isPresent()) {
-            return tweetRepository.findByUserId(userId.get());
+            mappedList = tweetRepository.findByUserId(userId.get());
+        } else {
+            mappedList = tweetRepository.findAll();
         }
-        return tweetRepository.findAll();
+        return mappedList.stream().map(p-> new TweetResponse(p)).collect(Collectors.toList());
     }
+
+//    @Override
+//    public List<TweetResponse> getAllTweets(Optional<Integer> userId) {
+//        // TODO handle exceptions
+//        List<Tweet> mappedList;
+//        if (userId.isPresent()) {
+//            mappedList = tweetRepository.findByUserId(userId.get());
+//        } else {
+//            mappedList = tweetRepository.findAll();
+//        }
+//        List<TweetResponse> tweetResponses = mappedList.stream()
+//                .map(p-> new TweetResponse(p)).collect(Collectors.toList());
+//        for (TweetResponse tweetResponse: tweetResponses) {
+//            int tweetId = tweetResponse.getId();
+//            int commentCount = commentService.getAllCommentsWithParam(Optional.empty(), Optional.of(tweetId)).size();
+//            int likeCount = likeService.getAllLikesWithParam(Optional.empty(), Optional.of(tweetId)).size();
+//            tweetResponse.setCommentCount(commentCount);
+//            tweetResponse.setLikeCount(likeCount);
+//        }
+//        return tweetResponses;
+//    }
 
     @Override
     public Tweet updateOneTweetById(TweetUpdateRequest tweetUpdateRequest, int id) {

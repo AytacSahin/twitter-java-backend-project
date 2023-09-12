@@ -60,7 +60,7 @@ public class LikeServiceImpl implements LikeService{
 
     @Override
     public void delete(int id) {
-        likeRepository.deleteOneLike(id);
+        likeRepository.deleteById(id);
     }
 
 }

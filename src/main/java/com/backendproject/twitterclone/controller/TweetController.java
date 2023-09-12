@@ -3,6 +3,7 @@ package com.backendproject.twitterclone.controller;
 import com.backendproject.twitterclone.entity.Tweet;
 import com.backendproject.twitterclone.requests.TweetCreateRequest;
 import com.backendproject.twitterclone.requests.TweetUpdateRequest;
+import com.backendproject.twitterclone.responses.TweetResponse;
 import com.backendproject.twitterclone.service.TweetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,8 @@ public class TweetController {
     }
 
     @GetMapping
-    public List<Tweet> getAllTweets(@RequestParam Optional<Integer> userId){
-//        Optional sayesinde userId gelirse -> userId'ye ait, gelmezse tum tweet'ler.
+    public List<TweetResponse> getAllTweets(@RequestParam Optional<Integer> userId){
+    //  Optional sayesinde userId gelirse -> userId'ye ait, gelmezse tum tweet'ler.
         return tweetService.getAllTweets(userId);
     }
 
