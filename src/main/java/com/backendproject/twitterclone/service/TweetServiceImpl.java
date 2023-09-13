@@ -5,12 +5,13 @@ import com.backendproject.twitterclone.entity.User;
 import com.backendproject.twitterclone.repository.TweetRepository;
 import com.backendproject.twitterclone.requests.TweetCreateRequest;
 import com.backendproject.twitterclone.requests.TweetUpdateRequest;
+import com.backendproject.twitterclone.responses.LikeResponse;
 import com.backendproject.twitterclone.responses.TweetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,14 +22,12 @@ public class TweetServiceImpl implements TweetService{
     private TweetRepository tweetRepository;
     private UserService userService;
     private LikeService likeService;
-    private CommentService commentService;
 
     @Autowired
-    public TweetServiceImpl(TweetRepository tweetRepository, UserService userService, LikeService likeService, CommentService commentService) {
+    public TweetServiceImpl(TweetRepository tweetRepository, UserService userService, @Lazy LikeService likeService) {
         this.tweetRepository = tweetRepository;
         this.userService = userService;
         this.likeService = likeService;
-        this.commentService = commentService;
     }
 
     @Override
@@ -53,14 +52,6 @@ public class TweetServiceImpl implements TweetService{
     }
 
     @Override
-    public Tweet delete(int id) {
-        //TODO handle exceptions
-        Tweet founded = find(id);
-        tweetRepository.delete(founded);
-        return founded;
-    }
-
-    @Override
     public List<TweetResponse> getAllTweets(Optional<Integer> userId) {
         // TODO handle exceptions
         List<Tweet> mappedList;
@@ -69,7 +60,10 @@ public class TweetServiceImpl implements TweetService{
         } else {
             mappedList = tweetRepository.findAll();
         }
-        return mappedList.stream().map(p-> new TweetResponse(p)).collect(Collectors.toList());
+        return mappedList.stream().map(p-> {
+                List<LikeResponse> likesIn = likeService.getAllLikesWithParam(Optional.empty(), Optional.of(p.getId()));
+                return new TweetResponse(p, likesIn);})
+                .collect(Collectors.toList());
     }
 
 //    @Override
@@ -105,5 +99,13 @@ public class TweetServiceImpl implements TweetService{
             return toUpdate;
         }
         return null;
+    }
+
+    @Override
+    public Tweet delete(int id) {
+        //TODO handle exceptions
+        Tweet founded = find(id);
+        tweetRepository.delete(founded);
+        return founded;
     }
 }

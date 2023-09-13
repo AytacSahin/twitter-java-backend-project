@@ -1,16 +1,13 @@
 package com.backendproject.twitterclone.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "user", schema = "twitter")
 public class User {
@@ -33,16 +30,4 @@ public class User {
 
     @Column(name = "password")
     private String password;
-
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private List<Tweet> tweets;
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private List<Comment> comments;
-//
-//    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private List<Like> likes;
 }

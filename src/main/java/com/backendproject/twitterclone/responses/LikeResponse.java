@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LikeResponse {
 
+    int id;
     int userId;
-    int postId;
+    int tweetId;
 
     public LikeResponse(Like entity) {
+        this.id = entity.getId();
         this.userId = entity.getUser().getId();
-        this.postId = entity.getTweet().getId();
+        this.tweetId = entity.getTweet().getId();
     }
 }
