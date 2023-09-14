@@ -5,6 +5,7 @@ import com.backendproject.twitterclone.entity.Tweet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -14,10 +15,10 @@ public class TweetResponse {
     private int userId;
     private String userName;
     private String userNick;
+    private String profilePicture;
     private String text;
     private String imageUrl;
-    private int likeCount;
-    private int CommentCount;
+    private LocalDateTime updatedAt;
     List<LikeResponse> tweedLikes;
 
     public TweetResponse(Tweet entity, List<LikeResponse> likes) {
@@ -25,8 +26,10 @@ public class TweetResponse {
         this.userId = entity.getUser().getId(); // user
         this.userName = entity.getUser().getName(); // user
         this.userNick = entity.getUser().getNick(); // user
+        this.profilePicture = entity.getUser().getProfilePicture();
         this.text = entity.getText(); // tweet
         this.imageUrl = entity.getImageUrl(); // tweet
+        this.updatedAt = entity.getUpdatedAt(); // tweet
         this.tweedLikes = likes;
     }
 }

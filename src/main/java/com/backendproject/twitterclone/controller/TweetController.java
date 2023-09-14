@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/tweet")
+@CrossOrigin(origins = "http://localhost:3000")
 public class TweetController {
     private TweetService tweetService;
 
