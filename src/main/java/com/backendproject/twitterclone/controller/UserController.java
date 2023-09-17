@@ -1,6 +1,7 @@
 package com.backendproject.twitterclone.controller;
 
 import com.backendproject.twitterclone.entity.User;
+import com.backendproject.twitterclone.responses.UserResponse;
 import com.backendproject.twitterclone.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User findById(@PathVariable int id) {
-        return userService.find(id);
+    public UserResponse findById(@PathVariable int id) {
+        return userService.getUserWithId(id);
     }
 
     @PostMapping

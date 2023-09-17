@@ -2,6 +2,7 @@ package com.backendproject.twitterclone.service;
 
 import com.backendproject.twitterclone.entity.User;
 import com.backendproject.twitterclone.repository.UserRepository;
+import com.backendproject.twitterclone.responses.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private UserRepository userRepository;
 
@@ -42,6 +43,7 @@ public class UserServiceImpl implements UserService{
         //TODO handle exceptions
         userRepository.delete(user);
     }
+
     @Override
     public User updateOneUser(User user, int id) {
         //TODO handle exceptions
@@ -59,5 +61,14 @@ public class UserServiceImpl implements UserService{
         User founded = find(id);
         userRepository.delete(founded);
         return founded;
+    }
+
+    @Override
+    public UserResponse getUserWithId(int id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return new UserResponse(user.get());
+        }
+        return null;
     }
 }
