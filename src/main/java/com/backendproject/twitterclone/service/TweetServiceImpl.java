@@ -55,7 +55,7 @@ public class TweetServiceImpl implements TweetService{
 
     @Override
     public List<TweetResponse> getAllTweets(Optional<Integer> userId) {
-        // TODO handle exceptions
+        //TODO handle exceptions
         List<Tweet> mappedList;
         if (userId.isPresent()) {
             mappedList = tweetRepository.findByUserId(userId.get());
@@ -69,26 +69,16 @@ public class TweetServiceImpl implements TweetService{
                 .collect(Collectors.toList());
     }
 
-//    @Override
-//    public List<TweetResponse> getAllTweets(Optional<Integer> userId) {
-//        // TODO handle exceptions
-//        List<Tweet> mappedList;
-//        if (userId.isPresent()) {
-//            mappedList = tweetRepository.findByUserId(userId.get());
-//        } else {
-//            mappedList = tweetRepository.findAll();
-//        }
-//        List<TweetResponse> tweetResponses = mappedList.stream()
-//                .map(p-> new TweetResponse(p)).collect(Collectors.toList());
-//        for (TweetResponse tweetResponse: tweetResponses) {
-//            int tweetId = tweetResponse.getId();
-//            int commentCount = commentService.getAllCommentsWithParam(Optional.empty(), Optional.of(tweetId)).size();
-//            int likeCount = likeService.getAllLikesWithParam(Optional.empty(), Optional.of(tweetId)).size();
-//            tweetResponse.setCommentCount(commentCount);
-//            tweetResponse.setLikeCount(likeCount);
-//        }
-//        return tweetResponses;
-//    }
+    @Override
+    public TweetResponse getOneTweet(int tweetId) {
+        List<LikeResponse> likesOneTweet = likeService.getAllLikesWithParam(Optional.empty(), Optional.of(tweetId));
+        Optional<Tweet> existTweet = tweetRepository.findById(tweetId);
+        if (existTweet.isPresent()) {
+            return new TweetResponse(existTweet.get(), likesOneTweet);
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public Tweet updateOneTweetById(TweetUpdateRequest tweetUpdateRequest, int id) {

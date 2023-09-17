@@ -29,8 +29,8 @@ public class TweetController {
     }
 
     @GetMapping("/{id}")
-    public Tweet findById(@PathVariable int id){
-        return tweetService.find(id);
+    public TweetResponse findById(@PathVariable int id){
+        return tweetService.getOneTweet(id);
     }
 
     @PostMapping

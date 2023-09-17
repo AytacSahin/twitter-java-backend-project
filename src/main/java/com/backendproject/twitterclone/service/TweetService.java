@@ -14,4 +14,5 @@ public interface TweetService {
     void delete(int id);
     List<TweetResponse> getAllTweets(Optional<Integer> userId);
     Tweet updateOneTweetById(TweetUpdateRequest tweetUpdateRequest, int id);
+    TweetResponse getOneTweet(int id);
 }

@@ -3,6 +3,7 @@ package com.backendproject.twitterclone.controller;
 import com.backendproject.twitterclone.entity.Comment;
 import com.backendproject.twitterclone.requests.CommentCreateRequest;
 import com.backendproject.twitterclone.requests.CommentUpdateRequest;
+import com.backendproject.twitterclone.responses.CommentResponse;
 import com.backendproject.twitterclone.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +23,7 @@ public class CommentController {
     }
 
     @GetMapping
-    public List<Comment> getAllComments(@RequestParam Optional<Integer> userId, @RequestParam Optional<Integer> tweetId){
+    public List<CommentResponse> getAllComments(@RequestParam Optional<Integer> userId, @RequestParam Optional<Integer> tweetId){
         return commentService.getAllCommentsWithParam(userId, tweetId);
     }
 

@@ -6,11 +6,14 @@ import com.backendproject.twitterclone.entity.User;
 import com.backendproject.twitterclone.repository.CommentRepository;
 import com.backendproject.twitterclone.requests.CommentCreateRequest;
 import com.backendproject.twitterclone.requests.CommentUpdateRequest;
+import com.backendproject.twitterclone.responses.CommentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -41,10 +44,11 @@ public class CommentServiceImpl implements CommentService {
     public Comment save(Comment comment) {
         return commentRepository.save(comment);
     }
+
     @Override
     public Comment update(int id, Comment comment) {
         Optional<Comment> existComment = commentRepository.findById(id);
-        if (existComment.isPresent()){
+        if (existComment.isPresent()) {
             Comment foundedComment = existComment.get();
             comment.setId(id);
             return commentRepository.save(foundedComment);
@@ -60,18 +64,27 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getAllCommentsWithParam(Optional<Integer> userId, Optional<Integer> tweetId) {
-        if(userId.isPresent() && tweetId.isPresent()) return commentRepository.findByUserIdAndTweetId(userId.get(), tweetId.get());
-        else if(userId.isPresent() ) return commentRepository.findByUserId(userId.get());
-        else if(tweetId.isPresent()) return commentRepository.findByTweetId(tweetId.get());
-        else return commentRepository.findAll();
+    public List<CommentResponse> getAllCommentsWithParam(Optional<Integer> userId, Optional<Integer> tweetId) {
+        List<Comment> mappedList;
+        if (userId.isPresent() && tweetId.isPresent()) {
+            mappedList = commentRepository.findByUserIdAndTweetId(userId.get(), tweetId.get());
+        } else if (userId.isPresent()) {
+            mappedList = commentRepository.findByUserId(userId.get());
+        } else if (tweetId.isPresent()) {
+            mappedList = commentRepository.findByTweetId(tweetId.get());
+        } else {
+            mappedList = commentRepository.findAll();
+        }
+        return mappedList.stream().map(comment -> {
+            return new CommentResponse(comment);
+        }).collect(Collectors.toList());
     }
 
     @Override
     public Comment createOneComment(CommentCreateRequest createRequest) {
         User user = userService.find(createRequest.getUserId());
         Tweet tweet = tweetService.find(createRequest.getTweetId());
-        if(user!= null && tweet !=null) {
+        if (user != null && tweet != null) {
             Comment commentToSave = new Comment();
             commentToSave.setText(createRequest.getText());
             commentToSave.setUser(user);
