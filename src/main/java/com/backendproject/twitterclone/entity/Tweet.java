@@ -1,6 +1,7 @@
 package com.backendproject.twitterclone.entity;
 
 import com.backendproject.twitterclone.helpers.TimeDateFn;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -9,6 +10,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -37,7 +40,12 @@ public class Tweet {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private User user;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tweet", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Like> likes = new ArrayList<>();
 
     public Tweet(String text, String imageUrl, User user) {
         this.text = text;

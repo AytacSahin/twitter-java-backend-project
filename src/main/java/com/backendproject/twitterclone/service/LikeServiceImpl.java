@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class LikeServiceImpl implements LikeService{
+public class LikeServiceImpl implements LikeService {
 
     private LikeRepository likeRepository;
     private UserService userService;
@@ -28,18 +28,19 @@ public class LikeServiceImpl implements LikeService{
     }
 
     @Override
-        public List<LikeResponse> getAllLikesWithParam(Optional<Integer> userId, Optional<Integer> tweetId) {
-            List<Like> list;
-            if(userId.isPresent() && tweetId.isPresent()) {
-                list = likeRepository.findByUserIdAndTweetId(userId.get(), tweetId.get());
-            }else if(userId.isPresent()) {
-                list = likeRepository.findByUserId(userId.get());
-            }else if(tweetId.isPresent()) {
-                list = likeRepository.findByTweetId(tweetId.get());
-            }else
-                list = likeRepository.findAll();
-            return list.stream().map(like -> new LikeResponse(like)).collect(Collectors.toList());
-        }
+    public List<LikeResponse> getAllLikesWithParam(Optional<Integer> userId, Optional<Integer> tweetId) {
+        List<Like> list;
+        if (userId.isPresent() && tweetId.isPresent()) {
+            list = likeRepository.findByUserIdAndTweetId(userId.get(), tweetId.get());
+        } else if (userId.isPresent()) {
+            list = likeRepository.findByUserId(userId.get());
+        } else if (tweetId.isPresent()) {
+            list = likeRepository.findByTweetId(tweetId.get());
+        } else
+            list = likeRepository.findAll();
+        return list.stream().map(like -> new LikeResponse(like)).collect(Collectors.toList());
+    }
+
     @Override
     public Like find(int id) {
         return likeRepository.findById(id).orElse(null);
@@ -47,9 +48,11 @@ public class LikeServiceImpl implements LikeService{
 
     @Override
     public Like createOneLike(LikeCreateRequest request) {
+        System.out.println(request.getUserId());
+        System.out.println(request.getTweetId());
         User user = userService.find(request.getUserId());
         Tweet tweet = tweetService.find(request.getTweetId());
-        if(user != null && tweet != null) {
+        if (user != null && tweet != null && !likeRepository.existsByUserIdAndTweetId(request.getUserId(), request.getTweetId())) {
             Like likeToSave = new Like();
             likeToSave.setTweet(tweet);
             likeToSave.setUser(user);
@@ -60,9 +63,20 @@ public class LikeServiceImpl implements LikeService{
 
     @Override
     public void delete(int id) {
-        likeRepository.deleteById(id);
-    }
 
+        //TODO handle exceptions
+//        Optional<User> user = userRepository.findById(id);
+//        return user.isPresent() ? user.get() : null;
+
+        Optional<Like> like = likeRepository.findById(id);
+        if (like.isPresent()) {
+            likeRepository.deleteById(id);
+        }
+        else {
+            //TODO exceptions
+            System.out.println("Böyle bir like yok....");
+        }
+    }
 }
 
 

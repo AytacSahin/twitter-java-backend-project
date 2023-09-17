@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface TweetService {
     Tweet find(int id);
     Tweet save(TweetCreateRequest newTweet);
-    Tweet delete(int id);
+    void delete(int id);
     List<TweetResponse> getAllTweets(Optional<Integer> userId);
     Tweet updateOneTweetById(TweetUpdateRequest tweetUpdateRequest, int id);
 }

@@ -1,9 +1,14 @@
 package com.backendproject.twitterclone.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.cache.interceptor.CacheAspectSupport;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -33,4 +38,12 @@ public class User {
 
     @Column(name = "profile_picture")
     private String profilePicture;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Tweet> tweets = new ArrayList<>();
 }

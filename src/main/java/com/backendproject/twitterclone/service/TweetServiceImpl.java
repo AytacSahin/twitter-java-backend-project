@@ -12,6 +12,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,6 +62,7 @@ public class TweetServiceImpl implements TweetService{
         } else {
             mappedList = tweetRepository.findAll();
         }
+        Collections.sort(mappedList, Comparator.comparing(Tweet::getUpdatedAt).reversed());
         return mappedList.stream().map(p-> {
                 List<LikeResponse> likesIn = likeService.getAllLikesWithParam(Optional.empty(), Optional.of(p.getId()));
                 return new TweetResponse(p, likesIn);})
@@ -102,10 +105,8 @@ public class TweetServiceImpl implements TweetService{
     }
 
     @Override
-    public Tweet delete(int id) {
+    public void delete(int id) {
         //TODO handle exceptions
-        Tweet founded = find(id);
-        tweetRepository.delete(founded);
-        return founded;
+        tweetRepository.deleteById(id);
     }
 }

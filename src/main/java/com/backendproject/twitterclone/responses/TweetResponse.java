@@ -19,7 +19,7 @@ public class TweetResponse {
     private String text;
     private String imageUrl;
     private LocalDateTime updatedAt;
-    List<LikeResponse> tweedLikes;
+    private int likeCount;
 
     public TweetResponse(Tweet entity, List<LikeResponse> likes) {
         this.id = entity.getId(); // tweet
@@ -30,6 +30,6 @@ public class TweetResponse {
         this.text = entity.getText(); // tweet
         this.imageUrl = entity.getImageUrl(); // tweet
         this.updatedAt = entity.getUpdatedAt(); // tweet
-        this.tweedLikes = likes;
+        this.likeCount = likes.size(); // likeCount
     }
 }
