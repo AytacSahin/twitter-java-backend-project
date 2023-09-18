@@ -17,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @JsonIgnoreProperties(value = {"handler", "hibernateLazyInitializer", "FieldHandler"})
-@Table(name="tweet", schema = "twitter")
+@Table(name = "tweet", schema = "twitter")
 
 public class Tweet {
     @Id

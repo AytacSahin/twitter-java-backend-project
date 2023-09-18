@@ -10,7 +10,6 @@ import com.backendproject.twitterclone.responses.CommentResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,6 +88,9 @@ public class CommentServiceImpl implements CommentService {
             commentToSave.setText(createRequest.getText());
             commentToSave.setUser(user);
             commentToSave.setTweet(tweet);
+            if (createRequest.getImageUrl() != null) {
+                commentToSave.setImageUrl(createRequest.getImageUrl());
+            }
             return commentRepository.save(commentToSave);
         } else {
             return null;

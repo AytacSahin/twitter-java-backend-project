@@ -31,6 +31,9 @@ public class Comment {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @ManyToOne(fetch = FetchType.LAZY )
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -43,12 +46,13 @@ public class Comment {
     @JsonIgnore
     private Tweet tweet;
 
-    public Comment(String text, User user, Tweet tweet) {
+    public Comment(String text, User user, Tweet tweet, String imageUrl) {
         this.text = text;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
         this.user = user;
         this.tweet = tweet;
+        this.imageUrl = imageUrl;
     }
 
     @PrePersist

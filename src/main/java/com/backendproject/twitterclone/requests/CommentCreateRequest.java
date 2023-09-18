@@ -7,4 +7,5 @@ public class CommentCreateRequest {
     String text;
     int userId;
     int tweetId;
+    String imageUrl;
 }

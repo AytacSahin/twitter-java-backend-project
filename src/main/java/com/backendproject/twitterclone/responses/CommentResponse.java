@@ -18,6 +18,7 @@ public class CommentResponse {
     private String profilePicture;
     private String text;
     private LocalDateTime updatedAt;
+    private String imageUrl;
 
     public CommentResponse(Comment entity) {
         this.id = entity.getId(); // comment
@@ -27,5 +28,6 @@ public class CommentResponse {
         this.profilePicture = entity.getUser().getProfilePicture();
         this.text = entity.getText(); // comment
         this.updatedAt = entity.getUpdatedAt(); // comment
+        this.imageUrl = entity.getImageUrl(); // comment
     }
 }
