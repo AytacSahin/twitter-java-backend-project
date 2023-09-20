@@ -19,4 +19,6 @@ public interface UserService {
     User deleteOneUser(int id);
 
     UserResponse getUserWithId(int id);
+
+    User getOneUserByName(String userName);
 }

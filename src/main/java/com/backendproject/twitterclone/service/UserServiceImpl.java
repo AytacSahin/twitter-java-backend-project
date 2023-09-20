@@ -4,13 +4,16 @@ import com.backendproject.twitterclone.entity.User;
 import com.backendproject.twitterclone.repository.UserRepository;
 import com.backendproject.twitterclone.responses.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private UserRepository userRepository;
 
@@ -19,6 +22,11 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findUserByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User is not valid"));
+    }
     @Override
     public List<User> findAll() {
         //TODO handle exceptions
@@ -70,5 +78,10 @@ public class UserServiceImpl implements UserService {
             return new UserResponse(user.get());
         }
         return null;
+    }
+
+    @Override
+    public User getOneUserByName(String userName) {
+        return userRepository.findByName(userName);
     }
 }
